@@ -1,16 +1,13 @@
 import './css/styles.css';
+import debounce from 'lodash.debounce';
+import Refs from './js/refs';
 import markupCountry from './js/temlpates/markupCountry.hbs';
 import markupCountriesList from './js/temlpates/markupCountriesList.hbs';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import debounce from 'lodash.debounce';
 import { fetchCountries } from './js/fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
-const refs = {
-  inputEl: document.querySelector('#search-box'),
-  countryListEl: document.querySelector('.country-list'),
-  countryInfoEl: document.querySelector('.country-info'),
-};
+const refs = new Refs();
 
 refs.inputEl.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
@@ -20,7 +17,6 @@ function onSearch(e) {
   cleanMarkup();
 
   if (!inputSearchCountry) {
-    Notify.info('Empty input field');
     return;
   }
 
@@ -31,7 +27,10 @@ function onSearch(e) {
 
 function markup(data) {
   if (data.length === 1) {
-    refs.countryInfoEl.insertAdjacentHTML('beforeend', markupCountry(data));
+    refs.countryInfoEl.insertAdjacentHTML(
+      'beforeend',
+      markupCountry(transformLanguagesObjToStr(data))
+    );
   } else if (data.length > 1 && data.length <= 10) {
     refs.countryListEl.insertAdjacentHTML(
       'beforeend',
@@ -44,11 +43,12 @@ function markup(data) {
   }
 }
 
-function notFound() {
-  Notify.failure('Oops, there is no country with that name');
-}
-
 function cleanMarkup() {
   refs.countryInfoEl.innerHTML = '';
   refs.countryListEl.innerHTML = '';
+}
+
+function transformLanguagesObjToStr(couuntryObj) {
+  couuntryObj[0].languages = Object.values(couuntryObj[0].languages).join(', ');
+  return couuntryObj;
 }

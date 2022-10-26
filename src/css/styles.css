@@ -19,24 +19,32 @@ body {
   margin-bottom: 16px;
 }
 
-#country-list {
-  list-style-type: none;
+.country-list {
+  padding-left: 0;
+  list-style-type: decimal;
 }
 
 .country-info--flag-title {
   display: flex;
   align-items: center;
-  outline: 1px red;
 }
 
 .flag-title--flag-img {
   margin-right: 20px;
 }
 
-p > span {
+.country-info--item > span {
   font-weight: 700;
 }
 
-.country-list--item {
+.countries-list--item {
+  list-style: none;
+}
+
+.country-info--list {
+  padding-left: 0;
+}
+
+.country-info--item {
   list-style: none;
 }
